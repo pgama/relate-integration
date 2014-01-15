@@ -1,0 +1,518 @@
+<project basedir="." default="site.compile" name="Relate-Integration">
+
+	<!--
+
+	Each of the following properties are used in the build script.
+	Values for these properties are set by the first place they are
+	defined, from the following list:
+
+	* Definitions on the "ant" command line (ant -Dfoo=bar compile).
+
+	* Definitions from a "build.properties" file in the top level
+	source directory of this application.
+
+	* Definitions from a "build.properties" file in the developer's
+	home directory.
+
+	* Default definitions in this build.xml file.
+
+	You will note below that property values can be composed based on the
+	contents of previously defined properties.  This is a powerful technique
+	that helps you minimize the number of changes required when your development
+	environment is modified.  Note that property composition is allowed within
+	"build.properties" files as well as in the "build.xml" script.
+
+   -->
+	<property file="../build.properties"/>
+	<property file="build.properties"/>
+	<property environment="env"/>
+
+	<!--
+	<property file="${user.home}/build.properties"/>
+	-->
+
+	<!-- 
+==================== File and Directory Names ======================== -->
+	<!--
+
+	These properties generally define file and directory names (or paths) that
+	affect where the build process stores its outputs.
+
+	app.name             Base name of this application, used to
+	construct filenames and directories.
+	Defaults to "myapp".
+
+	app.version          Version number of this iteration of the application.
+
+	build.home           The directory into which the "prepare" and
+	"compile" targets will generate their output.
+	Defaults to "build".
+
+	catalina.home        The directory in which you have installed
+	a binary distribution of Tomcat 4.  This will
+	be used by the "deploy" target.
+
+	catalina.lib         The directory in which you have installed
+	a binary distribution of Tomcat 4 followed by
+	shared/lib. This will be used by the compilation
+	classpath.
+
+	dist.home            The name of the base directory in which
+	distribution files are created.
+	Defaults to "dist".
+
+	jspc.output          The path that the jspc task will write the compiled
+	java files to.  Normally this should be set to the
+	working directory within Tomcat that is appropriate
+	for the web application and host for this project.
+
+   -->
+
+	<!-- The name and version of this application, needed for building the WAR file in the "site.dist" task -->
+	<property name="app.name" value="Relate-Integration"/>
+	<property name="app.version" value="1.0"/>
+	<property name="build.home" value="${basedir}/build"/>
+	<property name="catalina.home" value="C:\Program Files\Apache Software Foundation\Tomcat 5.0"/>
+	<property name="catalina.lib" value="${catalina.home}/lib"/>
+	<property name="site.name" value="Starter"/>
+	<property name="dist.home" value="${basedir}/dist"/>
+	<property name="docs.home" value="${basedir}/docs"/>
+	<property name="jspc.output" value="${catalina.home}/work/Standalone/localhost/starter"/>
+	<property name="src.home" value="${basedir}/src"/>
+	<property name="WebContent.home" value="${basedir}/WebContent"/>
+	<property name="webapp-lib.home" value="${basedir}/WebContent/WEB-INF/lib"/>
+	<property name="lib.home" value="${basedir}/lib"/>
+
+
+	<property name="myjava.home" value="${env.JAVA_HOME}"/>
+
+	<!-- properties used to control where the plugins are extracted -->
+	<property name="plugin-extract.src.home" value="${src.home}"/>
+	<property name="plugin-extract.WebContent.home" value="${WebContent.home}"/>
+
+	<!-- Where do we want the manifest file created which will be included in our distribution file -->
+	<property name="manifest.dest" value="${build.home}/WEB-INF/classes/manifestheader"/>
+	<!-- The file that we'll auto create which includes our current application version -->
+	<property name="timestamp.file.dest" value="${build.home}/build.jsp"/>
+
+	<!-- 
+================== Javascript Code Minification Level ================ -->
+	<property name="minify.level" value="45"/>
+
+	<!--  
+==================== Compilation Control Options ==================== -->
+
+	<!--
+
+	These properties control option settings on the Javac compiler when it
+	is invoked using the <javac> task.
+
+	compile.debug        Should compilation include the debug option?
+
+	compile.deprecation  Should compilation include the deprecation option?
+
+	compile.optimize     Should compilation include the optimize option?
+
+   -->
+
+	<property name="compile.debug" value="true"/>
+	<property name="compile.deprecation" value="false"/>
+	<property name="compile.optimize" value="true"/>
+
+	<!-- Prepare Scripts Properties -->
+	<property name="scripts.home" value="${basedir}/scripts"/>
+
+	<!-- The root of this project -->
+	<property name="base.dir" value="${basedir}"/>
+	<!-- Where all of the Java code for this project resides -->
+	<property name="src.dir" value="${base.dir}/src"/>
+	<!-- Where all of the JSPs and other web application source files resides (beside the Java files) -->
+	<property name="WebContent.dir" value="${base.dir}/WebContent"/>
+	<!-- The location where the web application will be compiled into -->
+	<property name="build.dir" value="${base.dir}/build"/>	
+	<!-- A temporary directory that is not part of the application that Ant can use when moving files around -->
+	<property name="temp.dir" value="${base.dir}/temp"/>
+	<!-- Where the WAR file and other any compiled file ready for distribution will get created -->
+	<property name="dist.dir" value="${base.dir}/dist"/>
+	<!-- Where our JavaDoc will get created -->
+	<property name="docs.dir" value="${base.dir}/docs"/>
+
+
+    <!-- 
+==================== External Dependencies =========================== -->
+
+	<!--
+
+	Use property values to define the locations of external JAR files on which
+	your application will depend.  In general, these values will be used for
+	two purposes:
+	* Inclusion on the classpath that is passed to the Javac compiler
+	* Being copied into the "/WEB-INF/lib" directory during execution
+	of the "deploy" target.
+
+	Because we will automatically include all of the Java classes that Tomcat 4
+	exposes to web applications, we will not need to explicitly list any of those
+	dependencies.  You only need to worry about external dependencies for JAR
+	files that you are going to include inside your "/WEB-INF/lib" directory.
+
+   -->
+
+
+	<!-- 
+==================== Compilation Classpath =========================== -->
+
+	<!--
+
+	Rather than relying on the CLASSPATH environment variable, Ant includes
+	features that makes it easy to dynamically construct the classpath you
+	need for each compilation.  The example below constructs the compile
+	classpath to include the servlet.jar file, as well as the other components
+	that Tomcat makes available to web applications automatically, plus anything
+	that you explicitly added.
+
+   -->
+
+	<path id="compile.classpath">
+		<fileset dir="${lib.home}">
+			<include name="*.jar"/>
+			<exclude name="*-sources.jar"/>
+			<exclude name="*-javadoc.jar"/>
+			<exclude name="*-src.jar"/>
+		</fileset>
+		<fileset dir="${webapp-lib.home}">
+			<include name="*.jar" />
+		</fileset>
+		<!--<pathelement location="${catalina.home}/common/classes"/>-->
+		<fileset dir="${catalina.home}/lib">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${catalina.home}/lib">
+			<include name="*.jar"/>
+		</fileset>
+		<!--<pathelement location="${catalina.home}/shared/classes"/>-->
+		<fileset dir="${catalina.lib}">
+			<include name="*.jar"/>
+		</fileset>
+		<pathelement location="${ocp.home}/build"/>
+	</path>
+
+
+
+	<!-- 
+==================== jsp-clean Target =================================== -->
+
+	<!--
+
+	The "jsp-clean" will clean up the temporary Java files that the "jspc" task
+	created as well as the class files that the "jsp-compile" task created.
+
+   -->
+	<target name="jsp.clean" description="Clean up all files created by jspc and jsp-compile tasks">
+		<delete includeEmptyDirs="true">
+			<fileset dir="${jspc.output}" includes="**/*"/>
+		</delete>
+	</target>
+
+	<!-- 
+==================== jspc Target =================================== -->
+
+	<!--
+
+	The "jspc" target will pre-compile all of the JSP files in the build directory
+	into their appropriate java files.  Normally you'll want to configure this
+	task to write the files into the working directory of your Tomcat instance.
+
+	NOTE:  This task won't actually compile the java files themselves,
+	it only creates the java files.  To compile them use the "jsp-compile"
+	task.
+
+   -->
+	<target name="jsp.jspc" description="Compile of the JSP files into Java files">
+		<mkdir dir="${jspc.output}"/>
+		<java classname="org.apache.jasper.JspC" fork="yes">
+			<arg line=" -v
+			-l
+			-d '${jspc.output}'
+			-p 'org.apache.jsp'
+			-uriroot '${jspc.output}'
+			-webapp '${build.home}' "/>
+			<classpath>
+				<fileset dir="${catalina.home}">
+					<include name="**/*.jar"/>
+				</fileset>
+			</classpath>
+		</java>
+	</target>
+
+	<!-- 
+==================== jsp-compile Target =================================== -->
+
+	<!--
+
+	The "jsp-compile" target will pre-compile all of the JSP files by
+	first running the "jspc" task to create a Java file for each JSP file
+	in the web application, and then run the javac task against all of the
+	files in the output directory that the "jspc" task created.
+
+   -->
+	<target name="jsp.compile" description="Compile of the Java files in the jspc output directory">
+
+		<!--
+		Separate the manager directory compile from the rest so that we don't run into
+		conflicts with the same jsp file name existing in two places
+      -->
+		<javac
+			srcdir="${jspc.output}"
+			debug="${compile.debug}"
+			deprecation="${compile.deprecation}"
+			optimize="${compile.optimize}">
+			<patternset>
+				<include name="**/*.java"/>
+				<exclude name="manager/**"/>
+			</patternset>
+			<classpath refid="compile.classpath"/>
+			<classpath>
+				<pathelement location="${build.home}/WEB-INF/classes"/>
+			</classpath>
+		</javac>
+		<javac
+			srcdir="${jspc.output}"
+			debug="${compile.debug}"
+			deprecation="${compile.deprecation}"
+			optimize="${compile.optimize}">
+			<patternset>
+				<include name="manager/**"/>
+			</patternset>
+			<classpath refid="compile.classpath"/>
+			<classpath>
+				<pathelement location="${build.home}/WEB-INF/classes"/>
+			</classpath>
+		</javac>
+	</target>
+
+	<!-- 
+==================== jsp-all Target =================================== -->
+
+	<!--
+
+	The "jsp-all" target will simply run the "jsp-clean", "jspc", and
+	"jsp-compile" tasks in order.
+
+   -->
+	<target name="jsp.all" depends="jsp.clean, jsp.jspc, jsp.compile" description="Cleans up the JSP working directory, and then pre-compiles the JSP pages"/>
+
+	<target name="jsp.j2ee-quote-fix" description="Address nested quotes for J2EE compliance">
+		<echo message="Replacing quotes for J2EE Application Server compliance..."/>
+		<replaceNestedQuotes dir="${WebContent.home}">
+			<include name="**/*.jsp"/>
+		</replaceNestedQuotes>
+	</target>
+
+
+
+	<!-- 
+==================== Site All Target ====================================== -->
+	<!--
+		The "site.all" target is a shortcut for running the "site.clean" target followed
+		by the "site.compile" target, to force a complete recompile.
+   -->
+	<target name="site.all" depends="site.clean,site.compile" description="Clean build and dist directories, then compile"/>
+
+	<!-- 
+==================== Site Init Target ================================== -->
+	<!--
+		The "site.init" target initializes and creates a new manifest file.
+	-->
+	<target name="site.init" description="Initialize the manifest file that our JAR file will need to contain the build and version detaills">
+		            <!-- Create build directories as needed -->
+		            <mkdir dir="${build.dir}"/>
+		            <mkdir dir="${build.dir}/WEB-INF"/>
+		            <mkdir dir="${build.dir}/WEB-INF/classes"/>
+		            <!-- Set the timestamp format we want -->
+		            <tstamp>
+		                  <format property="TIMESTAMP" pattern="MM/dd/yyyy 'at' HH:mm:ss z" locale="en"/>
+		            </tstamp>
+		            <!-- Create the manifest file header -->
+		            <echo message="Build initiated on ${TIMESTAMP}"/>
+		            <echo message="Creating Custom Manifest Headers"/>
+		            <delete file="${manifest.dest}"/>
+		            <property name="implementation-version-tag" value="starter-${app.version}-${DSTAMP}${TSTAMP}" />
+		            <echo message="${implementation-version-tag}" />
+		            <echo file="${manifest.dest}"></echo>
+	</target>
+
+
+	<!-- 
+==================== UpdateTimeStampFile Target ===================================== -->
+	<!--
+	  The "site.updatetimestampfile" target creates a "build.jsp" file at the root of the compiled
+	  application that reflects a timestamp of when the compile was performed.
+	-->
+	<target name="site.updatetimestampfile" description="Creates a timestamp file in the WAR build">
+		<!-- Set the timestamp format we want -->
+		<tstamp>
+			<format property="TIMESTAMP" pattern="MM/dd/yyyy 'at' hh:mm:ss z" locale="en"/>
+		</tstamp>
+
+		<!-- Create the manifest file header -->
+		<echo message="Building war file on ${TIMESTAMP}"/>
+		<echo message="Creating Version Build File: ${timestamp.file.dest}"/>
+		<delete file="${timestamp.file.dest}"/>
+		<echo file="${timestamp.file.dest}">Application Version: ${app.version}.${DSTAMP}${TSTAMP}&lt;br/&gt;
+Build time: &lt;b&gt;${TIMESTAMP}&lt;/b&gt;&lt;br/&gt;
+		</echo>
+	</target>
+
+	<!-- 
+==================== Site Compile Target ================================== -->
+	<!--
+		Recompile the entire application and move all of the necessary files into
+		the "build" directory.
+	-->
+	<target name="site.compile" depends="site.prepare,site.updatetimestampfile,internal_site.compile" description="Compile entire application and deploy to the 'build' directory" />
+
+	<target name="internal_site.compile" unless="eclipse.compile.enabled" description="Compile the java code for this application only">
+
+		<!-- Compile Java classes as necessary -->
+		<echo message="Compiling code in ${base.dir}/src to ${build.dir}/WEB-INF/classes"/>
+		<mkdir dir="${base.dir}/src"/>
+		<mkdir dir="${build.dir}/WEB-INF/classes"/>
+		<javac srcdir="${base.dir}/src"
+			destdir="${build.dir}/WEB-INF/classes"
+			extdirs="${myjava.home}/jre/lib/ext"
+			debug="${compile.debug}"
+			deprecation="${compile.deprecation}"
+			optimize="${compile.optimize}">
+			<classpath refid="compile.classpath"/>
+		</javac>
+
+		<!-- Copy application resources -->
+		<echo message="Compiling property files in ${base.dir}/src to ${build.dir}/WEB-INF/classes"/>
+		<copy todir="${build.dir}/WEB-INF/classes">
+			<fileset dir="${base.dir}/src" includes="**/*.properties"/>
+		</copy>
+
+	</target>
+
+	<!-- 
+==================== Site Prepare Target ================================== -->
+	<!--
+		The "site.prepare" target is used to create the "build" destination directory,
+		and copy the static contents of your web application to it.  If you need
+		to copy static files from external dependencies, you can customize the
+		contents of this task.
+
+		Normally, this task is executed indirectly when needed, specifically as a
+		dependency of the "site.compile" task.
+   -->
+	<target name="site.prepare" depends="site.init" description="Prepares the build directory for a compile">
+
+		<!-- Copy web application content of this web application -->
+		<echo message="Copying content to ${build.dir} from ${base.dir}/WebContent"/>
+		<copy todir="${build.dir}">
+			<fileset dir="${WebContent.dir}"/>
+		</copy>
+
+	</target>
+
+
+
+	<!-- 
+==================== Site Quick Prepare Target ================================== -->
+	<!--
+		The "site.prepare.quick" target is used to update the build directory with any
+		of the jsps or js files that have been updated in the web directory.
+		It is intended as a more efficient way to update the build directory when
+		you're only making simple changes to JSP files.
+	-->
+	<target name="site.prepare.quick" description="Copies any updates to JSP of JS files to the build directory">
+		<!-- Copy only jsp/js files from the web application -->
+		<copy todir="${build.dir}">
+			<fileset dir="${WebContent.dir}">
+				<include name="**/*.js"/>
+				<include name="**/*.jsp"/>
+				<exclude name="assets/**"/>
+				<exclude name="WEB-INF/**"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- 
+==================== Site ID Prepare Target ================================== -->
+	<!--
+		The "site.prepare.id" target is used to update the build directory with any
+		of the jsps, js, css and image files that have been updated in the web directory.
+		It is intended to be the build script IDs use most.
+	-->
+	<target name="site.prepare.id" description="Copies any updates to JSP of JS files to the build directory">
+		<!-- Copy only jsp/js files from the web application -->
+		<copy todir="${build.dir}">
+			<fileset dir="${WebContent.dir}">
+				<include name="**/*.js"/>
+				<include name="**/*.jsp"/>
+				<include name="**/*.css"/>
+				<include name="**/*.gif"/>
+				<include name="**/*.jpg"/>
+				<include name="**/*.png"/>
+				<exclude name="WEB-INF/**"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- 
+==================== Site Dist Target ===================================== -->
+	<!--
+		The "site.dist" target creates a binary distribution of your application
+		in a directory structure ready to be deployed as a unit.  In this case,
+		it creates a "WAR" file of the fully compiled and packaged application, and
+		depends on running the "compile" task first.  It also creates a "jar" file
+		that contains just the compiled Java classes, as well as a zip file of
+		all the application javadoc.
+   -->
+	<target name="site.dist" depends="site.compile" description="Create a WAR file of the application ready for distribution">
+		<mkdir dir="${dist.dir}"/>
+
+		<!-- Create application WAR file -->
+		<jar jarfile="${dist.dir}/${app.name}.war" basedir="${build.dir}" excludes="**/assets/**" />
+
+		<!-- Create the jar file with the class files for commands and forms -->
+		<jar jarfile="${dist.dir}/${app.name}-classes.jar" basedir="${build.dir}/WEB-INF/classes"
+			manifest="${manifest.dest}" excludes="**/manifestheader"/>
+
+		<!-- Create application source file -->
+		<jar jarfile="${dist.dir}/${app.name}-src.jar" basedir="${src.dir}"
+		 	 manifest="${manifest.dest}" excludes="**/manifestheader"/>
+
+		<!-- Create the application docs zip file -->
+        <mkdir dir="${docs.dir}"/>
+		<zip zipfile="${dist.dir}/${app.name}-docs.zip">
+			<zipfileset dir="${docs.dir}" prefix="docs"/>
+		</zip>
+	</target>
+
+	<!-- 
+====================== Site Clean Target ==================================== -->
+	<!--
+		The "site.clean" target clears out any previous "build", "dist", and "docs" directories,
+		so that you can be ensured the entire application can be built from scratch.
+   -->
+	<target name="site.clean" description="Delete old build, docs and dist directories">
+		<!--
+			Note that we're purpusefully only emptying the build directory instead of deleting
+			it completely in order to preserve any symbolic links made to the "build" directory.
+		-->
+		<delete includeemptydirs="true">
+    		<fileset dir="${build.dir}" includes="**/*"/>
+  		</delete>
+		<delete dir="${docs.dir}"/>
+		<delete dir="${dist.dir}"/>
+	</target>
+
+	<!-- 
+==================== Site Update All Target ===================================== -->
+	<target name="site.updateall" depends="site.clean,site.prepare,site.updatetimestampfile,internal_site.compile" description="Compile entire application and deploy to the 'build' directory" />
+
+</project>
+
+
+

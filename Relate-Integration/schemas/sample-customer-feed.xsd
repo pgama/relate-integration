@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="Customers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Customer" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Customer">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="LastUpdateInfo" type="LastUpdateInfoType"/>
+        <xs:element name="RetailStoreID" type="xs:string"/>
+        <xs:element name="SignupDate" type="xs:date" minOccurs="0"/>
+        <xs:element name="CustomerNumber" type="xs:string"/>
+        <xs:element name="CustomerReference" type="xs:string"/>
+        <xs:element name="OrgName" type="xs:string"/>
+        <xs:element name="CustOrgTypcode" type="xs:string"/>
+        <xs:element name="EmployeeID" type="xs:string"/>
+        <xs:element name="Affiliation" type="AffiliationType" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="Prospect" type="xs:boolean" minOccurs="0"/>
+        <xs:element name="Source" type="xs:string"/>
+        <xs:element name="BusinessName" type="xs:string"/>
+        <xs:element name="CustomerClass" type="xs:string"/>
+        <xs:element name="EntityInformation" type="EntityInformationType"/>
+        <xs:element name="PersonalPreferences" type="PersonalPreferencesType"/>
+        <xs:element name="AlternateKey" type="AlternateKeyType" minOccurs="0"  maxOccurs="unbounded"/>
+        <xs:element name="CustomAttribute" type="CustomAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="CustomerNotes" type="CustomerNotesContainerType" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="Action" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="LastUpdateInfoType">
+    <xs:sequence>
+      <xs:element name="UpdateUserID" type="xs:string"/>
+      <xs:element name="UpdateDate" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AffiliationType">
+    <xs:sequence>
+      <xs:element name="RetailStoreID" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="Action" type="xs:string"/>
+  </xs:complexType>
+  <xs:complexType name="EntityInformationType">
+    <xs:sequence>
+      <xs:element name="Individual" type="IndividualType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="IndividualType">
+      <xs:sequence>
+        <xs:element name="Suffix" type="xs:string"/>
+        <xs:element name="Salutation" type="xs:string"/>
+        <xs:element name="SortingName" type="xs:string" minOccurs="0"/>
+        <xs:element name="NickName" type="xs:string"/>
+        <xs:element name="Name" type="CustomerNameType"/>
+        <xs:element name="ContactInformation" type="ContactInformationType"/>
+        <xs:element name="PersonalSummary" type="PersonalSummaryType"/>
+        <xs:element name="SocioEconomicProfile" type="SocioEconomicProfileType"/>
+      </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ContactInformationType">
+    <xs:sequence>
+      <xs:element name="Address" type="AddressType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="EMail" type="EMailType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Telephone" type="TelephoneType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AddressType">
+      <xs:sequence>
+        <xs:element name="AddressLine1" type="AddressLineType"/>
+        <xs:element name="AddressLine2" type="AddressLineType"/>
+        <xs:element name="AddressLine3" type="AddressLineType"/>
+        <xs:element name="AddressLine4" type="AddressLineType"/>
+        <xs:element name="ApartmentNumber" type="xs:string"/>
+        <xs:element name="City" type="AddressLineType"/>
+        <xs:element name="Territory" type="TerritoryType"/>
+        <xs:element name="PostalCode" type="PostalCodeType"/>
+        <xs:element name="County" type="xs:string" minOccurs="0"/>
+        <xs:element name="Country" type="xs:string"/>
+      </xs:sequence>
+     <xs:attribute name="ContactPreferenceCode" type="xs:string"/>
+     <xs:attribute name="Label" type="xs:string"/>
+     <xs:attribute name="PrimaryFlag" type="xs:boolean"/>
+     <xs:attribute name="TypeCode" type="xs:string"/>
+    <xs:attribute name="ValidFlag" type="xs:boolean"/>
+   </xs:complexType>
+  
+  <xs:simpleType name="AddressLineType">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="TerritoryType">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="PostalCodeType">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  
+  <xs:complexType name="EMailType">
+      <xs:sequence>
+        <xs:element name="EMailAddress" type="xs:string"/>
+      </xs:sequence>
+    <xs:attribute name="ContactPreferenceCode" type="xs:string"/>
+    <xs:attribute name="Label" type="xs:string"/>
+    <xs:attribute name="PrimaryFlag" type="xs:boolean"/>
+    <xs:attribute name="TypeCode" type="xs:string"/>
+  </xs:complexType>
+  
+  <xs:complexType name="TelephoneType">
+      <xs:sequence>
+        <xs:element name="PhoneNumber" type="xs:string"/>
+        <xs:element name="Extension" type="xs:string"/>
+      </xs:sequence>
+    <xs:attribute name="ContactPreferenceCode" type="xs:string"/>
+    <xs:attribute name="Label" type="xs:string"/>
+    <xs:attribute name="PrimaryFlag" type="xs:boolean"/>
+    <xs:attribute name="TypeCode" type="xs:string"/>
+   </xs:complexType>
+  
+  <xs:complexType name="PersonalSummaryType">
+      <xs:sequence>
+        <xs:element name="GenderType" type="xs:string"/>
+        <xs:element name="BirthDate" type="xs:date"/>
+        <xs:element name="MaritalStatusCode" type="xs:string"/>
+        <xs:element name="Ethnicity" type="xs:string"/>
+        <xs:element name="Rent" type="xs:boolean"/>
+        <xs:element name="LanguageCode" type="xs:string"/>
+      </xs:sequence>
+ </xs:complexType>
+  
+  <xs:complexType name="SocioEconomicProfileType">
+      <xs:sequence>
+        <xs:element name="HighestEducationalLevelName" type="xs:string"/>
+        <xs:element name="AnnualIncomeAmount" type="xs:string"/>
+        <xs:element name="NetWorth" type="xs:string"/>
+      </xs:sequence>
+ </xs:complexType>
+  
+  <xs:complexType name="PersonalPreferencesType">
+    <xs:sequence>
+      <xs:element name="ContactPreference" type="ContactPreferenceType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ContactPreferenceType">
+    <xs:sequence/>
+    <xs:attribute name="ContactType" type="ContactPreferenceContactType"/>
+    <xs:attribute name="Permission" type="xs:boolean"/>
+    <xs:attribute name="SubTypeCode" type="xs:string"/>
+  </xs:complexType>
+  <xs:simpleType name="ContactPreferenceContactType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Mail"/>
+      <xs:enumeration value="Email"/>
+      <xs:enumeration value="Phone"/>
+      <xs:enumeration value="Fax"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <xs:complexType name="AlternateKeyType">
+    <xs:sequence>
+      <xs:element name="AlternateID" type="xs:string"/>
+    </xs:sequence>
+    <xs:attribute name="TypeCode" type="xs:string"/>
+  </xs:complexType>
+ 
+  <xs:complexType name="CustomAttributeType">
+    <xs:sequence>
+      <xs:element name="AttributeValue" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string"/>
+  </xs:complexType>
+  
+  <xs:complexType name="CustomerNotesContainerType">
+    <xs:sequence>
+      <xs:element name="CustomerNote" type="CustomerNotesType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CustomerNotesType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="createDate" type="xs:dateTime"/>
+        <xs:attribute name="createUser" type="xs:string"/>
+        <xs:attribute name="location" type="xs:string"/>
+        <xs:attribute name="type" type="xs:string"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  
+  <xs:complexType name="CustomerNameType">
+    <xs:sequence>
+      <xs:element name="Name" type="CustomerNameTypeEntry" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CustomerNameTypeEntry">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="Location" type="NameLocationType"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:simpleType name="NameLocationType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="First"/>
+      <xs:enumeration value="First2"/>
+      <xs:enumeration value="Middle"/>
+      <xs:enumeration value="Last"/>
+      <xs:enumeration value="Last2"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+</xs:schema>
