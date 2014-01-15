@@ -3,7 +3,7 @@
 echo "Began execution of Command"
 
 set JAVA_HOME="C:\Program Files\Java\jdk1.7.0_45"
-set APP_ROOT=C:\apache-tomcat-7.0.27\webapps\local.rim.com\ROOT
+set APP_ROOT=C:\apache-tomcat-7.0.27\webapps\relate-integration\ROOT
 
 rem FOR /F "delims=.=" %%G IN (..\build.properties)  DO @echo %%G %%H
 
