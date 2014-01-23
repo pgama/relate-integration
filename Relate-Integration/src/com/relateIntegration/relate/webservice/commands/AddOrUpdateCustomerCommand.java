@@ -35,7 +35,8 @@ public class AddOrUpdateCustomerCommand
 	{
 		System.out.println("add or update customer Webservice called ");
 		
-
+		//String trypath = WebUtil.findEnvEntryValue("logging.file.path").toString();
+		
 		RIMUserDAO rimUserDAO = daoManager.getRimUserDAO();
 		
 		AddOrUpdateResponse response =new AddOrUpdateResponse();

@@ -20,7 +20,8 @@ public class EmailCSVReader
 		try 
 		{
 			CsvReader reader=new CsvReader(csvfile.getAbsolutePath());
-			reader.setDelimiter(config.getDelim().charAt(0));
+			//reader.setDelimiter(config.getDelim().charAt(0));
+			reader.setDelimiter("\t".charAt(0));
 			reader.readHeaders();
 			
 			RIMUser emailCustomer = null;
@@ -43,7 +44,7 @@ public class EmailCSVReader
 				}
 				catch(Exception e)
 				{
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 			}
 			System.out.println("Completed reading data for records:"+counter);

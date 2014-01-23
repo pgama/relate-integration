@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import com.relateIntegration.dao.support.DAOManager;
 import com.relateIntegration.relate.webservice.commands.UpdatePhoneOptInStatusCommand;
 import com.relateIntegration.user.model.PhoneSubscription;
@@ -16,12 +14,10 @@ import com.rim.integration.io.ImpexFileProcessor;
 
 public class PhoneProcessor extends ImpexFileProcessor {
 	
-	public int process(PhoneConfig config)
+	public int process(PhoneConfig config,DAOManager daoManager)
 	{
 		int success = 0;
 		String[] files = getFilesToProcess(config);
-		ClassPathXmlApplicationContext ctx =  new ClassPathXmlApplicationContext("Spring-Relate.xml");
-		DAOManager daoManager = (DAOManager)ctx.getBean("daoManager");
 		
 		if(files!=null && files.length>0)
 		{

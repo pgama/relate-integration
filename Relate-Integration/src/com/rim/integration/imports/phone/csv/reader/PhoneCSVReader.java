@@ -20,7 +20,8 @@ public class PhoneCSVReader
 		try 
 		{
 			CsvReader reader=new CsvReader(csvfile.getAbsolutePath());
-			reader.setDelimiter(config.getDelim().charAt(0));
+			//reader.setDelimiter(config.getDelim().charAt(0));
+			reader.setDelimiter("\t".charAt(0));
 			reader.readHeaders();
 			
 			PhoneSubscription phoneCustomer = null;

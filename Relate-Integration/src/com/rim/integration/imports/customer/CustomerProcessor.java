@@ -6,8 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import com.relateIntegration.dao.RIMUserDAO;
 import com.relateIntegration.dao.support.DAOManager;
 import com.relateIntegration.user.model.RIMUser;
@@ -21,7 +19,7 @@ import com.rim.integration.io.ImpexFileProcessor;
 
 public class CustomerProcessor extends ImpexFileProcessor {
 
-	public int process(CustomerConfig config)
+	public int process(CustomerConfig config,DAOManager daoManager )
 	{
 		int success = 0;
 		String[] files = getFilesToProcess(config);
@@ -34,7 +32,7 @@ public class CustomerProcessor extends ImpexFileProcessor {
 				List<RIMUser> customers = reader.readData(config,file);
 				
 				//Call Module code to update DB.
-				List<RIMUser> customerListForXMLFile = updateDBAndGetCustomerListForXMLFile(customers);
+				List<RIMUser> customerListForXMLFile = updateDBAndGetCustomerListForXMLFile(customers,daoManager);
 				
 				CustomerXMLFileWriter writer = new CustomerXMLFileWriter();
 				success = writer.writeData(config, customerListForXMLFile);
@@ -44,11 +42,8 @@ public class CustomerProcessor extends ImpexFileProcessor {
 		return success;
 	}
 
-	private List<RIMUser> updateDBAndGetCustomerListForXMLFile(List<RIMUser> customers)
+	private List<RIMUser> updateDBAndGetCustomerListForXMLFile(List<RIMUser> customers,DAOManager daoManager )
 	{		
-		ClassPathXmlApplicationContext ctx =  new ClassPathXmlApplicationContext("Spring-Relate.xml");
-
-		DAOManager daoManager = (DAOManager)ctx.getBean("daoManager");
 		RIMUserDAO rimUserDAO = daoManager.getRimUserDAO();
 		
 		List<RIMUser> customerListForXMLFile = new ArrayList<RIMUser>();

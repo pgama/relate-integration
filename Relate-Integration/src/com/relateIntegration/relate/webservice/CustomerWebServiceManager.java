@@ -6,8 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.axis2.AxisFault;
-
 import com.dtv.csx.webservices.customer.CustomerServicesApiServiceStub;
 import com.dtv.csx.webservices.customer.RelateProcessingExceptionException0;
 import com.dtv.csx.webservices.customer.CustomerServicesApiServiceStub.AddOrUpdateCustomer;
@@ -31,39 +29,14 @@ import com.relateIntegration.util.RIMConstants;
 
 public class CustomerWebServiceManager 
 {
-	public static String certFileUrl;        
-	public static String relateWSEndpointUrl;
+	public static CustomerServicesApiServiceStub relateWSStub;
 	
-	public static void setCertFileUrl(String certFileUrl) {
-		CustomerWebServiceManager.certFileUrl = certFileUrl;
+	public static void setRelateWSStub(CustomerServicesApiServiceStub relateWSStub) {
+		CustomerWebServiceManager.relateWSStub = relateWSStub;
 	}
-	
-	public static void setRelateWSEndpointUrl(String relateWSEndpointUrl) {
-		CustomerWebServiceManager.relateWSEndpointUrl = relateWSEndpointUrl;
-	}
-
-
-	public static CustomerServicesApiServiceStub getRelateWebservice()
-	{		
-		System.setProperty("javax.net.ssl.trustStore",certFileUrl);
-		CustomerServicesApiServiceStub stub;
-		try 
-		{
-			stub = new CustomerServicesApiServiceStub(relateWSEndpointUrl);
-			return stub;
-		} 
-		catch (AxisFault e)
-		{
-			//System.out.println("Could not construct the stub for relate web service due to: " + e.getMessage() );
-			return null;
-		}
-		
-	}
-
 
 	public static String addOrUdateCustomer (Map<String, Object> customerInformation , int relateIntegrationId)
 	{
-		CustomerServicesApiServiceStub stub = getRelateWebservice();
 		AddOrUpdateCustomerE addOrUpdateCustomerE = new AddOrUpdateCustomerE();
 		AddOrUpdateCustomer customer =new AddOrUpdateCustomer();
 		
@@ -75,7 +48,7 @@ public class CustomerWebServiceManager
 		
 		try 
 		{
-			responseE = (AddOrUpdateCustomerResponseE ) stub.addOrUpdateCustomer(addOrUpdateCustomerE);
+			responseE = (AddOrUpdateCustomerResponseE ) relateWSStub.addOrUpdateCustomer(addOrUpdateCustomerE);
 		}
 		catch (RemoteException e) 
 		{
@@ -98,7 +71,6 @@ public class CustomerWebServiceManager
 
 	public static List<Object> searchCustomers (Map<String,Object> customerInformation , int relateIntegrationId)
 	{
-		CustomerServicesApiServiceStub stub = getRelateWebservice();
 		SearchCustomersE customersE= new SearchCustomersE();
 		SearchCustomers customers= new SearchCustomers();
 		
@@ -109,7 +81,7 @@ public class CustomerWebServiceManager
 		
 		try 
 		{
-			responseE = (SearchCustomersResponseE)stub.searchCustomers(customersE);
+			responseE = (SearchCustomersResponseE)relateWSStub.searchCustomers(customersE);
 		} 
 		catch (RemoteException e) 
 		{
@@ -130,7 +102,6 @@ public class CustomerWebServiceManager
 	
 	public static List<Object>  retrieveCustomer(int alternateId)
 	{
-		CustomerServicesApiServiceStub stub = getRelateWebservice();
 		RetrieveCustomerE customersE= new RetrieveCustomerE();
 		RetrieveCustomer customer= new RetrieveCustomer();
 		
@@ -142,7 +113,7 @@ public class CustomerWebServiceManager
 		
 		try 
 		{
-			responseE = (RetrieveCustomerResponseE)stub.retrieveCustomer(customersE);
+			responseE = (RetrieveCustomerResponseE)relateWSStub.retrieveCustomer(customersE);
 		} 
 		catch (RemoteException e) 
 		{
@@ -164,8 +135,6 @@ public class CustomerWebServiceManager
 	
 	public static String  mergeCustomers(CustIdentifier custSource, CustIdentifier[] custTarget)
 	{
-		CustomerServicesApiServiceStub stub = getRelateWebservice();
-		
 		MergeCustomers mergeCustomers = new MergeCustomers();
 		MergeCustomersE mergeCustomersE = new MergeCustomersE();
 		
@@ -178,7 +147,7 @@ public class CustomerWebServiceManager
 		
 		try 
 		{
-			responseE = (MergeCustomersResponseE)stub.mergeCustomers(mergeCustomersE);
+			responseE = (MergeCustomersResponseE)relateWSStub.mergeCustomers(mergeCustomersE);
 		} 
 		catch (RemoteException e) 
 		{
