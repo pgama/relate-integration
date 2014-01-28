@@ -22,6 +22,7 @@ public class RIMUser {
 	String obsession_fashion;
 	Date lastUpdatedTime;
 	String existInRelate;
+	String ocpCustId;
 	
 	public int getRelateIntegrationId() {
 		return relateIntegrationId;
@@ -130,6 +131,12 @@ public class RIMUser {
 	}
 	public void setObsession_fashion(String obsessionFashion) {
 		obsession_fashion = obsessionFashion;
+	}
+	public String getOcpCustId() {
+		return ocpCustId;
+	}
+	public void setOcpCustId(String ocpCustId) {
+		this.ocpCustId = ocpCustId;
 	}
 
 }

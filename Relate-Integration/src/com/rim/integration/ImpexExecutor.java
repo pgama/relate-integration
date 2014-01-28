@@ -98,6 +98,7 @@ public class ImpexExecutor {
 				config.setPhoneColumn(props.get("customer.csv.phone.column").toString());
 				config.setStateColumn(props.get("customer.csv.state.column").toString());
 				config.setZipcodeColumn(props.get("customer.csv.zipcode.column").toString());
+				config.setOcpCustIdColumn(props.get("customer.csv.ocpcustid.column").toString());
 				config.setDateFormat(props.get("customer.csv.dateformat").toString());
 				config.setDelim(props.get("customer.csv.delim").toString());
 				config.setHeaderIncluded(Boolean.parseBoolean(props.get("customer.csv.headerincluded").toString()));

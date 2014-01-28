@@ -12,34 +12,37 @@ public class CommerceUtil {
 	{
 		Map<String , Object> relateMappingAtrributes =new HashMap<String, Object>();
 		
-		if(attributes.containsKey(RIMConstants.RequestMapping.EMAIL_KEY))
+		if(attributes.containsKey(RIMConstants.RequestMapping.EMAIL_KEY) && !attributes.get(RIMConstants.RequestMapping.EMAIL_KEY).toString().isEmpty())
 			relateMappingAtrributes.put(RIMConstants.CustomerInformation.EMAIL_KEY, attributes.get(RIMConstants.RequestMapping.EMAIL_KEY));
 		
-		if(attributes.containsKey(RIMConstants.RequestMapping.FIRST_NAME_KEY))
+		if(attributes.containsKey(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_OCPID) && !attributes.get(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_OCPID).toString().isEmpty())
+			relateMappingAtrributes.put(RIMConstants.CustomerInformation.OCP_CUST_ID_KEY, attributes.get(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_OCPID));
+		
+		if(attributes.containsKey(RIMConstants.RequestMapping.FIRST_NAME_KEY) && !attributes.get(RIMConstants.RequestMapping.FIRST_NAME_KEY).toString().isEmpty())
 			relateMappingAtrributes.put(RIMConstants.CustomerInformation.FIRST_NAME_KEY, attributes.get(RIMConstants.RequestMapping.FIRST_NAME_KEY));
 		
-		if(attributes.containsKey(RIMConstants.RequestMapping.LAST_NAME_KEY))
+		if(attributes.containsKey(RIMConstants.RequestMapping.LAST_NAME_KEY) && !attributes.get(RIMConstants.RequestMapping.LAST_NAME_KEY).toString().isEmpty())
 			relateMappingAtrributes.put(RIMConstants.CustomerInformation.LAST_NAME_KEY, attributes.get(RIMConstants.RequestMapping.LAST_NAME_KEY));
 		
-		if(attributes.containsKey(RIMConstants.RequestMapping.ADDRESSLINE1_KEY))
+		if(attributes.containsKey(RIMConstants.RequestMapping.ADDRESSLINE1_KEY) && !attributes.get(RIMConstants.RequestMapping.ADDRESSLINE1_KEY).toString().isEmpty())
 			relateMappingAtrributes.put(RIMConstants.CustomerInformation.ADDRESS_LINE_1_KEY, attributes.get(RIMConstants.RequestMapping.ADDRESSLINE1_KEY));
 			
-		if(attributes.containsKey(RIMConstants.RequestMapping.ADDRESSLINE2_KEY))
+		if(attributes.containsKey(RIMConstants.RequestMapping.ADDRESSLINE2_KEY) && !attributes.get(RIMConstants.RequestMapping.ADDRESSLINE2_KEY).toString().isEmpty())
 			relateMappingAtrributes.put(RIMConstants.CustomerInformation.ADDRESS_LINE_2_KEY, attributes.get(RIMConstants.RequestMapping.ADDRESSLINE2_KEY));
 			
-		if(attributes.containsKey(RIMConstants.RequestMapping.CITY_KEY))
+		if(attributes.containsKey(RIMConstants.RequestMapping.CITY_KEY) && !attributes.get(RIMConstants.RequestMapping.CITY_KEY).toString().isEmpty())
 			relateMappingAtrributes.put(RIMConstants.CustomerInformation.CITY_KEY, attributes.get(RIMConstants.RequestMapping.CITY_KEY));
 				
-		if(attributes.containsKey(RIMConstants.RequestMapping.TERRITORY_KEY))
+		if(attributes.containsKey(RIMConstants.RequestMapping.TERRITORY_KEY) && !attributes.get(RIMConstants.RequestMapping.TERRITORY_KEY).toString().isEmpty())
 			relateMappingAtrributes.put(RIMConstants.CustomerInformation.STATE_KEY, attributes.get(RIMConstants.RequestMapping.TERRITORY_KEY));
 		
-		if(attributes.containsKey(RIMConstants.RequestMapping.COUNTRY_KEY))
+		if(attributes.containsKey(RIMConstants.RequestMapping.COUNTRY_KEY) && !attributes.get(RIMConstants.RequestMapping.COUNTRY_KEY).toString().isEmpty())
 			relateMappingAtrributes.put(RIMConstants.CustomerInformation.COUNTRY_KEY, attributes.get(RIMConstants.RequestMapping.COUNTRY_KEY));
 			
-		if(attributes.containsKey(RIMConstants.RequestMapping.POSTAL_CODE_KEY))
+		if(attributes.containsKey(RIMConstants.RequestMapping.POSTAL_CODE_KEY) && !attributes.get(RIMConstants.RequestMapping.POSTAL_CODE_KEY).toString().isEmpty())
 			relateMappingAtrributes.put(RIMConstants.CustomerInformation.ZIP_CODE_KEY, attributes.get(RIMConstants.RequestMapping.POSTAL_CODE_KEY));
 			
-		if(attributes.containsKey(RIMConstants.RequestMapping.EMAIL_OPT_IN_KEY))
+		if(attributes.containsKey(RIMConstants.RequestMapping.EMAIL_OPT_IN_KEY) && !attributes.get(RIMConstants.RequestMapping.EMAIL_OPT_IN_KEY).toString().isEmpty())
 		{
 			if(attributes.get(RIMConstants.RequestMapping.EMAIL_OPT_IN_KEY).toString().equalsIgnoreCase("true"))
 				relateMappingAtrributes.put(RIMConstants.CustomerInformation.EMAIL_OPT_IN_STATUS_KEY, "Y");
@@ -47,7 +50,7 @@ public class CommerceUtil {
 				relateMappingAtrributes.put(RIMConstants.CustomerInformation.EMAIL_OPT_IN_STATUS_KEY, "N");
 		}
 
-		if(attributes.containsKey(RIMConstants.RequestMapping.OBSESSION_ACCESSORIES_KEY))
+		if(attributes.containsKey(RIMConstants.RequestMapping.OBSESSION_ACCESSORIES_KEY) && !attributes.get(RIMConstants.RequestMapping.OBSESSION_ACCESSORIES_KEY).toString().isEmpty())
 		{
 			if(attributes.get(RIMConstants.RequestMapping.OBSESSION_ACCESSORIES_KEY).toString().equalsIgnoreCase("true"))
 				relateMappingAtrributes.put(RIMConstants.CustomerInformation.OBSESSION_ACCESSORIES_KEY, "Y");
@@ -55,21 +58,21 @@ public class CommerceUtil {
 				relateMappingAtrributes.put(RIMConstants.CustomerInformation.OBSESSION_ACCESSORIES_KEY, "N");
 		}
 		
-		if(attributes.containsKey(RIMConstants.RequestMapping.OBSESSION_CLOTHES_KEY))
+		if(attributes.containsKey(RIMConstants.RequestMapping.OBSESSION_CLOTHES_KEY) && !attributes.get(RIMConstants.RequestMapping.OBSESSION_CLOTHES_KEY).toString().isEmpty())
 		{
 			if(attributes.get(RIMConstants.RequestMapping.OBSESSION_CLOTHES_KEY).toString().equalsIgnoreCase("true"))
 				relateMappingAtrributes.put(RIMConstants.CustomerInformation.OBSESSION_CLOTHES_KEY, "Y");
 			else
 				relateMappingAtrributes.put(RIMConstants.CustomerInformation.OBSESSION_CLOTHES_KEY, "N");
 		}
-		if(attributes.containsKey(RIMConstants.RequestMapping.OBSESSION_SHOES_KEY))
+		if(attributes.containsKey(RIMConstants.RequestMapping.OBSESSION_SHOES_KEY) && !attributes.get(RIMConstants.RequestMapping.OBSESSION_SHOES_KEY).toString().isEmpty())
 		{
 			if(attributes.get(RIMConstants.RequestMapping.OBSESSION_SHOES_KEY).toString().equalsIgnoreCase("true"))
 				relateMappingAtrributes.put(RIMConstants.CustomerInformation.OBSESSION_SHOES_KEY, "Y");
 			else
 				relateMappingAtrributes.put(RIMConstants.CustomerInformation.OBSESSION_SHOES_KEY, "N");
 		}
-		if(attributes.containsKey(RIMConstants.RequestMapping.OBSESSION_FASHION_KEY))
+		if(attributes.containsKey(RIMConstants.RequestMapping.OBSESSION_FASHION_KEY) && !attributes.get(RIMConstants.RequestMapping.OBSESSION_FASHION_KEY).toString().isEmpty())
 		{
 			if(attributes.get(RIMConstants.RequestMapping.OBSESSION_FASHION_KEY).toString().equalsIgnoreCase("true"))
 				relateMappingAtrributes.put(RIMConstants.CustomerInformation.OBSESSION_FASHION_KEY, "Y");
@@ -77,7 +80,7 @@ public class CommerceUtil {
 				relateMappingAtrributes.put(RIMConstants.CustomerInformation.OBSESSION_FASHION_KEY, "N");
 		}
 
-		if(attributes.containsKey(RIMConstants.RequestMapping.PHONE_NUMBER_KEY))
+		if(attributes.containsKey(RIMConstants.RequestMapping.PHONE_NUMBER_KEY) && !attributes.get(RIMConstants.RequestMapping.PHONE_NUMBER_KEY).toString().isEmpty())
 			relateMappingAtrributes.put(RIMConstants.CustomerInformation.PHONE_NUMBER_KEY, attributes.get(RIMConstants.RequestMapping.PHONE_NUMBER_KEY));
 		
 		return relateMappingAtrributes;
@@ -89,6 +92,9 @@ public class CommerceUtil {
 		
 		if(user.getEmail()!=null && !user.getEmail().equalsIgnoreCase("null"))
 			relateMappingAtrributes.put(RIMConstants.CustomerInformation.EMAIL_KEY, user.getEmail());
+		
+		if(user.getOcpCustId()!=null && !user.getOcpCustId().equalsIgnoreCase("null"))
+			relateMappingAtrributes.put(RIMConstants.CustomerInformation.OCP_CUST_ID_KEY, user.getOcpCustId());
 		
 		if(user.getFirstName()!=null  && !user.getFirstName().equalsIgnoreCase("null"))
 			relateMappingAtrributes.put(RIMConstants.CustomerInformation.FIRST_NAME_KEY, user.getFirstName());
@@ -163,7 +169,6 @@ public class CommerceUtil {
 		return relateMappingAtrributes;
 	}
 	
-	
 	public static Map<String, Object> getModuleTableDataMapForPhoneSubscription (Map<String , Object> attributes)
 	{
 		Map<String , Object> relateMappingAtrributes =new HashMap<String, Object>();
@@ -189,6 +194,9 @@ public class CommerceUtil {
 			
 			if(attributes.containsKey(RIMConstants.CustomerInformation.EMAIL_KEY))
 				user.setEmail(attributes.get(RIMConstants.CustomerInformation.EMAIL_KEY).toString());
+			
+			if(attributes.containsKey(RIMConstants.CustomerInformation.OCP_CUST_ID_KEY))
+				user.setOcpCustId(attributes.get(RIMConstants.CustomerInformation.OCP_CUST_ID_KEY).toString());
 			
 			if(attributes.containsKey(RIMConstants.CustomerInformation.RELATE_INTEGRATION_ID_KEY))
 				user.setRelateIntegrationId(Integer.parseInt(attributes.get(RIMConstants.CustomerInformation.RELATE_INTEGRATION_ID_KEY).toString()));
@@ -308,7 +316,10 @@ public class CommerceUtil {
 				requestMap.put(RIMConstants.RequestMapping.OBSESSION_FASHION_KEY, user.getObsession_fashion());
 			
 			if(user.getRelateIntegrationId()!= 0)
-				requestMap.put(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE, user.getRelateIntegrationId());
+				requestMap.put(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_MODULEID, user.getRelateIntegrationId());
+			
+			if(user.getOcpCustId()!= null)
+				requestMap.put(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_OCPID, user.getOcpCustId());
 			
 			if(user.getPhoneNumber()!= null)
 				requestMap.put(RIMConstants.RequestMapping.PHONE_NUMBER_KEY, user.getPhoneNumber());

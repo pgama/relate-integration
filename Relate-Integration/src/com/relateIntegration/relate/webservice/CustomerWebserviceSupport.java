@@ -59,13 +59,17 @@ public class CustomerWebserviceSupport {
 			customerData.setCustomerID(customerInformation.get(RIMConstants.RequestMapping.CUSTOMER_KEY).toString());
 		}
 		
-		//check what is the alternate id and set it.
-		String alternateId = "";
-		if(relateIntegrationId > 0)
-		{
-			alternateId = String.valueOf(relateIntegrationId);
-			customerData.setAlternateKey(getAlternateKey(alternateId));
+		String ocpCustId=null;
+		if(customerInformation.containsKey(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_OCPID))
+		{	
+			ocpCustId = customerInformation.get(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_OCPID).toString();
 		}
+		AlternateKeyType alternateKeys[] = getAlternateKey(relateIntegrationId,ocpCustId);
+		if(alternateKeys!=null && alternateKeys.length > 0 )
+		{
+			customerData.setAlternateKey(alternateKeys);
+		}
+		
 		customerData.setEntityInformation(getEntityInformation(customerInformation));
 		
 		PersonalPreferencesType personalPreferences =new PersonalPreferencesType();
@@ -182,14 +186,25 @@ public class CustomerWebserviceSupport {
 			return null;
 	}
 	
-	public static AlternateKeyType[] getAlternateKey( String alertnateId) 
+	public static AlternateKeyType[] getAlternateKey( int moduleId ,String ocpId) 
 	{
-		AlternateKeyType[] alternateKey =new AlternateKeyType[1];
-		alternateKey[0] = new AlternateKeyType();
-		
-		alternateKey[0].setAlternateID(alertnateId);
-		alternateKey[0].setTypeCode(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE);
-		return alternateKey;
+		ArrayList<AlternateKeyType> list = new ArrayList<AlternateKeyType>();
+		if(moduleId > 0)
+		{
+			AlternateKeyType alternate_moduleId = new AlternateKeyType();
+			alternate_moduleId.setAlternateID(String.valueOf(moduleId));
+			alternate_moduleId.setTypeCode(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_MODULEID);
+			list.add(alternate_moduleId);
+		}
+		if(ocpId!=null && !ocpId.isEmpty() && !ocpId.equalsIgnoreCase("0"))
+		{
+			AlternateKeyType alternate_ocpId  = new AlternateKeyType();
+			alternate_ocpId.setAlternateID(ocpId);
+			alternate_ocpId.setTypeCode(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_OCPID);
+			list.add(alternate_ocpId);
+		}
+		AlternateKeyType[] alternateKey =new AlternateKeyType[list.size()];
+		return list.toArray(alternateKey);
 	}
 	
 	public static EntityInformationType getEntityInformation( Map<String, Object> customerInformation)
@@ -335,12 +350,19 @@ public class CustomerWebserviceSupport {
 	{
 		CustomerLookupType customerDataLookup = RelateCustomerFactory.getCustomerLookupInstance();
 		//customerDataLookup.setCustomerID(customerId);
-		String alternateId = "";
-		if(relateIntegrationId > 0)
-		{
-			alternateId = String.valueOf(relateIntegrationId);
-			customerDataLookup.setAlternateKey(getAlternateKeyLookup(alternateId));
+		
+		String ocpCustId=null;
+		if(customerInformation.containsKey(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_OCPID))
+		{	
+			ocpCustId = customerInformation.get(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_OCPID).toString();
 		}
+		AlternateKeyLookupType alternateKeys[] = getAlternateKeyLookup(relateIntegrationId,ocpCustId);
+		if(alternateKeys!=null && alternateKeys.length > 0 )
+		{
+			customerDataLookup.setAlternateKey(alternateKeys);
+		}
+		
+		
 		customerDataLookup.setEntityInformation(getEntityInformationLookup(customerInformation));
 		
 		if(customerInformation.containsKey(RIMConstants.RequestMapping.CUSTOMER_KEY) && !customerInformation.get(RIMConstants.RequestMapping.CUSTOMER_KEY).toString().isEmpty())
@@ -478,13 +500,25 @@ public class CustomerWebserviceSupport {
 		return entityInformation;
 	}
 
-	public static AlternateKeyLookupType[] getAlternateKeyLookup( String alertnateId) 
+	public static AlternateKeyLookupType[] getAlternateKeyLookup(int moduleId ,String ocpId) 
 	{
-		AlternateKeyLookupType[] alternateKey =new AlternateKeyLookupType[1];
-		alternateKey[0] =new AlternateKeyLookupType();
-		alternateKey[0].setAlternateID(alertnateId);
-		alternateKey[0].setTypeCode(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE);
-		return alternateKey;
+		ArrayList<AlternateKeyLookupType> list = new ArrayList<AlternateKeyLookupType>();
+		if(moduleId > 0)
+		{
+			AlternateKeyLookupType alternate_moduleId = new AlternateKeyLookupType();
+			alternate_moduleId.setAlternateID(String.valueOf(moduleId));
+			alternate_moduleId.setTypeCode(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_MODULEID);
+			list.add(alternate_moduleId);
+		}
+		if(ocpId!=null && !ocpId.isEmpty() && !ocpId.equalsIgnoreCase("0"))
+		{
+			AlternateKeyLookupType alternate_ocpId  = new AlternateKeyLookupType();
+			alternate_ocpId.setAlternateID(ocpId);
+			alternate_ocpId.setTypeCode(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_OCPID);
+			list.add(alternate_ocpId);
+		}
+		AlternateKeyLookupType[] alternateKey =new AlternateKeyLookupType[list.size()];
+		return list.toArray(alternateKey);
 	}
 
 	
@@ -535,15 +569,17 @@ public class CustomerWebserviceSupport {
 					lookupAttributes.put(RIMConstants.RequestMapping.LAST_UPDATE_DATE_KEY, cust.getLastUpdateInfo().getUpdateDate());
 			}
 			
-			//alternate key (considering their would be only one alternateKey as relateModuleId for the particular emailId)
 			if(cust.getAlternateKey()!=null && cust.getAlternateKey().length > 0)
 			{
 				for(AlternateKeyReturnType altKey : cust.getAlternateKey())
 				{
-					if(altKey.getTypeCode().equalsIgnoreCase(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE))
+					if(altKey.getTypeCode().equalsIgnoreCase(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_MODULEID))
 					{
-						lookupAttributes.put(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE, altKey.getAlternateID());
-						break;
+						lookupAttributes.put(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_MODULEID, altKey.getAlternateID());
+					}
+					if(altKey.getTypeCode().equalsIgnoreCase(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_OCPID))
+					{
+						lookupAttributes.put(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_OCPID, altKey.getAlternateID());
 					}
 				}
 			}

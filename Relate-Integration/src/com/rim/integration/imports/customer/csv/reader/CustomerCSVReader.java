@@ -46,6 +46,7 @@ public class CustomerCSVReader {
 					customer.setEmail(reader.get(config.getEmailColumn()));
 					customer.setPhoneNumber(reader.get(config.getPhoneColumn()));
 					customer.setEmailOptInStatus(reader.get(config.getEmailOptInStatusColumn()));
+					customer.setOcpCustId(reader.get(config.getOcpCustIdColumn()));
 					SimpleDateFormat sdf = new SimpleDateFormat(config.getDateFormat());
 					Date timeStamp = sdf.parse(reader.get(config.getTimeStampColumn()));
 					customer.setLastUpdatedTime(timeStamp);

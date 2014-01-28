@@ -31,6 +31,7 @@ public class UserRowMapper implements RowMapper<RIMUser>{
 		user.setObsession_accessories(resultSet.getString(16));
 		user.setObsession_shoes(resultSet.getString(17));
 		user.setObsession_fashion(resultSet.getString(18));
+		user.setOcpCustId(resultSet.getString(19));
 		
 		return user;
 	}

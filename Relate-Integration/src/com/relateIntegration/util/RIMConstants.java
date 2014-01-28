@@ -4,7 +4,8 @@ public class RIMConstants {
 	
 	public static class RequestMapping 
 	{	
-			public static String AlTERNATE_KEY_TYPECODE ="relateModuleId";
+			public static String AlTERNATE_KEY_TYPECODE_MODULEID ="relateModuleId";
+			public static String AlTERNATE_KEY_TYPECODE_OCPID ="ocpCustId";
 			public static String FIRST_NAME_KEY ="firstName";
 			public static String LAST_NAME_KEY ="lastName";
 			public static String PHONE_EXTENSION_KEY = "phoneExtension";
@@ -79,6 +80,7 @@ public class RIMConstants {
 		public static String OBSESSION_FASHION_KEY = "OBSESSION_FASHION";
 		public static String LAST_UPDATED_TIME_KEY ="LAST_UPDATED_TIME";
 		public static String EXIST_IN_RELATE_KEY ="EXIST_IN_RELATE";
+		public static String OCP_CUST_ID_KEY ="OCP_CUST_ID";
 		
 	}
 	

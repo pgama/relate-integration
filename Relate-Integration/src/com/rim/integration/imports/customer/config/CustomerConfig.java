@@ -17,6 +17,7 @@ public class CustomerConfig extends ImpexConfig
 	private String zipcodeColumn;
 	private String emailOptInStatusColumn;
 	private String timeStampColumn;
+	private String ocpCustIdColumn;
 	
 	public String getFirstNameColumn() {
 		return firstNameColumn;
@@ -89,6 +90,12 @@ public class CustomerConfig extends ImpexConfig
 	}
 	public void setTimeStampColumn(String timeStampColumn) {
 		this.timeStampColumn = timeStampColumn;
+	}
+	public String getOcpCustIdColumn() {
+		return ocpCustIdColumn;
+	}
+	public void setOcpCustIdColumn(String ocpCustIdColumn) {
+		this.ocpCustIdColumn = ocpCustIdColumn;
 	}
 	
 	

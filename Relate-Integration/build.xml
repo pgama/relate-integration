@@ -1,5 +1,4 @@
 <project basedir="." default="site.compile" name="Relate-Integration">
-
 	<!--
 
 	Each of the following properties are used in the build script.
@@ -61,11 +60,6 @@
 	distribution files are created.
 	Defaults to "dist".
 
-	jspc.output          The path that the jspc task will write the compiled
-	java files to.  Normally this should be set to the
-	working directory within Tomcat that is appropriate
-	for the web application and host for this project.
-
    -->
 
 	<!-- The name and version of this application, needed for building the WAR file in the "site.dist" task -->
@@ -74,31 +68,15 @@
 	<property name="build.home" value="${basedir}/build"/>
 	<property name="catalina.home" value="C:\Program Files\Apache Software Foundation\Tomcat 5.0"/>
 	<property name="catalina.lib" value="${catalina.home}/lib"/>
-	<property name="site.name" value="Starter"/>
 	<property name="dist.home" value="${basedir}/dist"/>
-	<property name="docs.home" value="${basedir}/docs"/>
-	<property name="jspc.output" value="${catalina.home}/work/Standalone/localhost/starter"/>
-	<property name="src.home" value="${basedir}/src"/>
-	<property name="WebContent.home" value="${basedir}/WebContent"/>
 	<property name="webapp-lib.home" value="${basedir}/WebContent/WEB-INF/lib"/>
 	<property name="lib.home" value="${basedir}/lib"/>
-
-
 	<property name="myjava.home" value="${env.JAVA_HOME}"/>
-
-	<!-- properties used to control where the plugins are extracted -->
-	<property name="plugin-extract.src.home" value="${src.home}"/>
-	<property name="plugin-extract.WebContent.home" value="${WebContent.home}"/>
 
 	<!-- Where do we want the manifest file created which will be included in our distribution file -->
 	<property name="manifest.dest" value="${build.home}/WEB-INF/classes/manifestheader"/>
 	<!-- The file that we'll auto create which includes our current application version -->
 	<property name="timestamp.file.dest" value="${build.home}/build.jsp"/>
-
-	<!-- 
-================== Javascript Code Minification Level ================ -->
-	<property name="minify.level" value="45"/>
-
 	<!--  
 ==================== Compilation Control Options ==================== -->
 
@@ -118,9 +96,6 @@
 	<property name="compile.debug" value="true"/>
 	<property name="compile.deprecation" value="false"/>
 	<property name="compile.optimize" value="true"/>
-
-	<!-- Prepare Scripts Properties -->
-	<property name="scripts.home" value="${basedir}/scripts"/>
 
 	<!-- The root of this project -->
 	<property name="base.dir" value="${basedir}"/>
@@ -196,120 +171,6 @@
 		<pathelement location="${ocp.home}/build"/>
 	</path>
 
-
-
-	<!-- 
-==================== jsp-clean Target =================================== -->
-
-	<!--
-
-	The "jsp-clean" will clean up the temporary Java files that the "jspc" task
-	created as well as the class files that the "jsp-compile" task created.
-
-   -->
-	<target name="jsp.clean" description="Clean up all files created by jspc and jsp-compile tasks">
-		<delete includeEmptyDirs="true">
-			<fileset dir="${jspc.output}" includes="**/*"/>
-		</delete>
-	</target>
-
-	<!-- 
-==================== jspc Target =================================== -->
-
-	<!--
-
-	The "jspc" target will pre-compile all of the JSP files in the build directory
-	into their appropriate java files.  Normally you'll want to configure this
-	task to write the files into the working directory of your Tomcat instance.
-
-	NOTE:  This task won't actually compile the java files themselves,
-	it only creates the java files.  To compile them use the "jsp-compile"
-	task.
-
-   -->
-	<target name="jsp.jspc" description="Compile of the JSP files into Java files">
-		<mkdir dir="${jspc.output}"/>
-		<java classname="org.apache.jasper.JspC" fork="yes">
-			<arg line=" -v
-			-l
-			-d '${jspc.output}'
-			-p 'org.apache.jsp'
-			-uriroot '${jspc.output}'
-			-webapp '${build.home}' "/>
-			<classpath>
-				<fileset dir="${catalina.home}">
-					<include name="**/*.jar"/>
-				</fileset>
-			</classpath>
-		</java>
-	</target>
-
-	<!-- 
-==================== jsp-compile Target =================================== -->
-
-	<!--
-
-	The "jsp-compile" target will pre-compile all of the JSP files by
-	first running the "jspc" task to create a Java file for each JSP file
-	in the web application, and then run the javac task against all of the
-	files in the output directory that the "jspc" task created.
-
-   -->
-	<target name="jsp.compile" description="Compile of the Java files in the jspc output directory">
-
-		<!--
-		Separate the manager directory compile from the rest so that we don't run into
-		conflicts with the same jsp file name existing in two places
-      -->
-		<javac
-			srcdir="${jspc.output}"
-			debug="${compile.debug}"
-			deprecation="${compile.deprecation}"
-			optimize="${compile.optimize}">
-			<patternset>
-				<include name="**/*.java"/>
-				<exclude name="manager/**"/>
-			</patternset>
-			<classpath refid="compile.classpath"/>
-			<classpath>
-				<pathelement location="${build.home}/WEB-INF/classes"/>
-			</classpath>
-		</javac>
-		<javac
-			srcdir="${jspc.output}"
-			debug="${compile.debug}"
-			deprecation="${compile.deprecation}"
-			optimize="${compile.optimize}">
-			<patternset>
-				<include name="manager/**"/>
-			</patternset>
-			<classpath refid="compile.classpath"/>
-			<classpath>
-				<pathelement location="${build.home}/WEB-INF/classes"/>
-			</classpath>
-		</javac>
-	</target>
-
-	<!-- 
-==================== jsp-all Target =================================== -->
-
-	<!--
-
-	The "jsp-all" target will simply run the "jsp-clean", "jspc", and
-	"jsp-compile" tasks in order.
-
-   -->
-	<target name="jsp.all" depends="jsp.clean, jsp.jspc, jsp.compile" description="Cleans up the JSP working directory, and then pre-compiles the JSP pages"/>
-
-	<target name="jsp.j2ee-quote-fix" description="Address nested quotes for J2EE compliance">
-		<echo message="Replacing quotes for J2EE Application Server compliance..."/>
-		<replaceNestedQuotes dir="${WebContent.home}">
-			<include name="**/*.jsp"/>
-		</replaceNestedQuotes>
-	</target>
-
-
-
 	<!-- 
 ==================== Site All Target ====================================== -->
 	<!--
@@ -336,7 +197,7 @@
 		            <echo message="Build initiated on ${TIMESTAMP}"/>
 		            <echo message="Creating Custom Manifest Headers"/>
 		            <delete file="${manifest.dest}"/>
-		            <property name="implementation-version-tag" value="starter-${app.version}-${DSTAMP}${TSTAMP}" />
+		            <property name="implementation-version-tag" value="${app.version}-${DSTAMP}${TSTAMP}" />
 		            <echo message="${implementation-version-tag}" />
 		            <echo file="${manifest.dest}"></echo>
 	</target>
@@ -413,50 +274,6 @@ Build time: &lt;b&gt;${TIMESTAMP}&lt;/b&gt;&lt;br/&gt;
 			<fileset dir="${WebContent.dir}"/>
 		</copy>
 
-	</target>
-
-
-
-	<!-- 
-==================== Site Quick Prepare Target ================================== -->
-	<!--
-		The "site.prepare.quick" target is used to update the build directory with any
-		of the jsps or js files that have been updated in the web directory.
-		It is intended as a more efficient way to update the build directory when
-		you're only making simple changes to JSP files.
-	-->
-	<target name="site.prepare.quick" description="Copies any updates to JSP of JS files to the build directory">
-		<!-- Copy only jsp/js files from the web application -->
-		<copy todir="${build.dir}">
-			<fileset dir="${WebContent.dir}">
-				<include name="**/*.js"/>
-				<include name="**/*.jsp"/>
-				<exclude name="assets/**"/>
-				<exclude name="WEB-INF/**"/>
-			</fileset>
-		</copy>
-	</target>
-
-	<!-- 
-==================== Site ID Prepare Target ================================== -->
-	<!--
-		The "site.prepare.id" target is used to update the build directory with any
-		of the jsps, js, css and image files that have been updated in the web directory.
-		It is intended to be the build script IDs use most.
-	-->
-	<target name="site.prepare.id" description="Copies any updates to JSP of JS files to the build directory">
-		<!-- Copy only jsp/js files from the web application -->
-		<copy todir="${build.dir}">
-			<fileset dir="${WebContent.dir}">
-				<include name="**/*.js"/>
-				<include name="**/*.jsp"/>
-				<include name="**/*.css"/>
-				<include name="**/*.gif"/>
-				<include name="**/*.jpg"/>
-				<include name="**/*.png"/>
-				<exclude name="WEB-INF/**"/>
-			</fileset>
-		</copy>
 	</target>
 
 	<!-- 

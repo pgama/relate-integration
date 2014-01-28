@@ -8,6 +8,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import com.relateIntegration.user.model.RIMUser;
+import com.relateIntegration.util.RIMConstants;
 import com.rim.integration.imports.customer.config.CustomerConfig;
 import com.rim.integration.utils.ImpexUtil;
 import com.rim.integration.xml.customer.AddressType;
@@ -117,12 +118,19 @@ public class CustomerXMLFileWriter {
 						customerRec.setEntityInformation(entityInformation);
 						
 						//AlternateKey
-						AlternateKeyType altKey = new AlternateKeyType();
+						AlternateKeyType moduleIdAltKey = new AlternateKeyType();
 						if(customer.getRelateIntegrationId() > 0 )
 						{	
-							altKey.setAlternateID(String.valueOf(customer.getRelateIntegrationId())); 
-							altKey.setTypeCode("RELATEMODULEID");
-							customerRec.getAlternateKey().add(altKey );
+							moduleIdAltKey.setAlternateID(String.valueOf(customer.getRelateIntegrationId())); 
+							moduleIdAltKey.setTypeCode(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_MODULEID);
+							customerRec.getAlternateKey().add(moduleIdAltKey );
+						}
+						AlternateKeyType ocpIdAltKey = new AlternateKeyType();
+						if(customer.getOcpCustId()!=null && !customer.getOcpCustId().isEmpty() && !customer.getOcpCustId().equalsIgnoreCase("null") && !customer.getOcpCustId().equalsIgnoreCase("0"))
+						{	
+							ocpIdAltKey.setAlternateID(String.valueOf(customer.getOcpCustId())); 
+							ocpIdAltKey.setTypeCode(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_OCPID);
+							customerRec.getAlternateKey().add(ocpIdAltKey );	
 						}
 						
 						//Preferences

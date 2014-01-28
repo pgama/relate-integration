@@ -105,7 +105,7 @@ public class CustomerWebServiceManager
 		RetrieveCustomerE customersE= new RetrieveCustomerE();
 		RetrieveCustomer customer= new RetrieveCustomer();
 		
-		customer.setAlternateKeyList(CustomerWebserviceSupport.getAlternateKeyLookup(String.valueOf(alternateId)));
+		customer.setAlternateKeyList(CustomerWebserviceSupport.getAlternateKeyLookup(alternateId,null));
 
 		customersE.setRetrieveCustomer(customer);
 		RetrieveCustomerResponseE responseE =null;
@@ -178,11 +178,11 @@ public class CustomerWebServiceManager
 		{
 			Map<String , Object> temp = (HashMap<String, Object>)custIter.next();
 			CustIdentifier tempCustIdendtifer = new CustIdentifier();
-			if( temp.containsKey(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE) && temp.get(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE).toString().equals(relateIntegrationId) && !sourceTargetExists )
+			if( temp.containsKey(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_MODULEID) && temp.get(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_MODULEID).toString().equals(relateIntegrationId) && !sourceTargetExists )
 			{
 				sourceCustomer = new CustIdentifier();
-				sourceCustomer.setAlternateKeyTypeCode(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE);
-				sourceCustomer.setAlternateKey(temp.get(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE).toString());
+				sourceCustomer.setAlternateKeyTypeCode(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_MODULEID);
+				sourceCustomer.setAlternateKey(temp.get(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_MODULEID).toString());
 				sourceTargetExists=true;
 			}
 			else if(temp.containsKey(RIMConstants.RequestMapping.CUSTOMER_KEY))

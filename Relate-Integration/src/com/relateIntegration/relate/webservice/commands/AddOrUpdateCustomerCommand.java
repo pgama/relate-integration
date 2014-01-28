@@ -35,8 +35,6 @@ public class AddOrUpdateCustomerCommand
 	{
 		System.out.println("add or update customer Webservice called ");
 		
-		//String trypath = WebUtil.findEnvEntryValue("logging.file.path").toString();
-		
 		RIMUserDAO rimUserDAO = daoManager.getRimUserDAO();
 		
 		AddOrUpdateResponse response =new AddOrUpdateResponse();
@@ -72,7 +70,7 @@ public class AddOrUpdateCustomerCommand
 			}
 			else
 			{
-				if(user.getLastUpdatedTime().compareTo(timeStampFromRequest) > 0)
+				if(user.getLastUpdatedTime()!=null && user.getLastUpdatedTime().compareTo(timeStampFromRequest) > 0)
 				{
 					response.setErrorMessage("TimeStamp from request is older than what relate has.");
 					response.setSuccess(false);

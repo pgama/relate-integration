@@ -21,9 +21,9 @@ public class LookupCustomerCommand
 			Map<String , Object> existingCustomerAtrributes = new HashMap<String, Object>();
 			
 			int relateModuleId =0;
-			if(attributes.containsKey(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE))
+			if(attributes.containsKey(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_MODULEID))
 			{
-				relateModuleId = Integer.parseInt(attributes.get(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE).toString());
+				relateModuleId = Integer.parseInt(attributes.get(RIMConstants.RequestMapping.AlTERNATE_KEY_TYPECODE_MODULEID).toString());
 			}
 			
 			customerList = CustomerWebServiceManager.searchCustomers(attributes,relateModuleId);

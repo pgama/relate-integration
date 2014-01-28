@@ -76,12 +76,12 @@ public class RIMUserDAOImpl extends JdbcDaoSupport implements RIMUserDAO{
 	public boolean insertRIMUser(RIMUser user) 
 	{
 		String sql = "INSERT INTO CUSTOMER_INFORMATION "+
-					 "( EMAIL, FIRST_NAME ,LAST_NAME ,ADDRESS_LINE_1, ADDRESS_LINE_2 , CITY , STATE , ZIP_CODE , EMAIL_OPT_STATUS, PHONE_NUMBER,  OBSESSION_CLOTHES , OBSESSION_ACCESSORIES , OBSESSION_SHOES , OBSESSION_FASHION, LAST_UPDATED_TIME ) " +
+					 "( EMAIL, FIRST_NAME ,LAST_NAME ,ADDRESS_LINE_1, ADDRESS_LINE_2 , CITY , STATE , ZIP_CODE , EMAIL_OPT_STATUS, PHONE_NUMBER,  OBSESSION_CLOTHES , OBSESSION_ACCESSORIES , OBSESSION_SHOES , OBSESSION_FASHION, LAST_UPDATED_TIME, OCP_CUST_ID ) " +
 					 "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		 
 		int rowsAffected = getJdbcTemplate().update(sql,
 				user.getEmail(),user.getFirstName() , user.getLastName() , user.getAddressLine1() , user.getAddressLine2() , user.getCity() ,user.getState() ,user.getZipCode(), 
-				user.getEmailOptInStatus() ,user.getPhoneNumber() , user.getObsession_clothes(),user.getObsession_accessories(),user.getObsession_shoes(),user.getObsession_fashion() ,user.getLastUpdatedTime());
+				user.getEmailOptInStatus() ,user.getPhoneNumber() , user.getObsession_clothes(),user.getObsession_accessories(),user.getObsession_shoes(),user.getObsession_fashion() ,user.getLastUpdatedTime(),user.getOcpCustId());
 
 		if(rowsAffected<=0)
 			{ return false; }

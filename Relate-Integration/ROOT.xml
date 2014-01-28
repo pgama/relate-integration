@@ -1,0 +1,82 @@
+<!-- $Id: site-context.xml.default,v 2.13 2011/04/13 20:57:55 mburns Exp $ -->
+<!-- OCP version 3.4.2 -->
+<Context>
+
+		<Environment name="cert.file.url" type="java.lang.String" value="D:/Relate-Integration/WebContent/WEB-INF/certs/jssecacerts"/>
+        <Environment name="relate.ws.endpoint.url" type="java.lang.String" value="https://ec2-54-235-197-142.compute-1.amazonaws.com:443/soap/F3G/v1_0/CustomerServices"/>
+
+		
+		<!-- Customer feed configurations -->
+		<Environment name="customer.read.dir.path" type="java.lang.String" value="D:/impex-app/data/source/customers"/>
+        <Environment name="customer.archive.path" type="java.lang.String" value="D:/impex-app/data/source/customers/archive"/>
+		<Environment name="customer.write.dir.path" type="java.lang.String" value="D:/impex-app/data/dest/customers"/>
+        <Environment name="customer.file.prefix" type="java.lang.String" value="Customer_"/>
+		<Environment name="customer.csv.addr1.column" type="java.lang.String" value="address1"/>
+        <Environment name="customer.csv.addr2.column" type="java.lang.String" value="address2"/>
+		<Environment name="customer.csv.city.column" type="java.lang.String" value="city"/>
+        <Environment name="customer.csv.country.column" type="java.lang.String" value="country"/>
+		<Environment name="customer.csv.email.column" type="java.lang.String" value="email"/>
+		<Environment name="customer.csv.fname.column" type="java.lang.String" value="firstName"/>
+        <Environment name="customer.csv.lname.column" type="java.lang.String" value="lastName"/>
+		<Environment name="customer.csv.phone.column" type="java.lang.String" value="phone"/>
+        <Environment name="customer.csv.state.column" type="java.lang.String" value="state"/>
+		<Environment name="customer.csv.zipcode.column" type="java.lang.String" value="zip"/>
+		<Environment name="customer.csv.ocpcustid.column" type="java.lang.String" value="ocpCustId"/>
+        <Environment name="customer.csv.timestamp.column" type="java.lang.String" value="timeStamp"/>
+		<Environment name="customer.csv.emailoptinstatus.column" type="java.lang.String" value="emailOptInStatus"/>
+		<Environment name="customer.csv.dateformat" type="java.lang.String" value="yyyy-MM-dd hh:mm:ss.SSS"/>
+        <Environment name="customer.csv.delim" type="java.lang.String" value="\t"/>
+		<Environment name="customer.csv.headerincluded" type="java.lang.String" value="true"/>
+		
+		
+		<!-- Email feed configurations -->
+		<Environment name="emailfeed.read.dir.path" type="java.lang.String" value="D:/impex-app/data/source/emailfeed"/>
+        <Environment name="emailfeed.write.dir.path" type="java.lang.String" value="D:/impex-app/data/source/emailfeed/archive"/>
+		<Environment name="emailfeed.archive.path" type="java.lang.String" value="D:/impex-app/data/source/emailfeed"/>
+        <Environment name="emailfeed.file.prefix" type="java.lang.String" value="Email_"/>
+		<Environment name="emailfeed.csv.email.column" type="java.lang.String" value="email"/>
+		<Environment name="emailfeed.csv.emailoptinstatus.column" type="java.lang.String" value="emailOptInStatus"/>
+        <Environment name="emailfeed.csv.timestamp.column" type="java.lang.String" value="timeStamp"/>
+		<Environment name="emailfeed.csv.dateformat" type="java.lang.String" value="yyyy-MM-dd hh:mm:ss.SSS"/>
+		<Environment name="emailfeed.csv.delim" type="java.lang.String" value="\t"/>
+		<Environment name="emailfeed.csv.headerincluded" type="java.lang.String" value="true"/>
+		
+		<!-- Phone feed configurations -->
+		<Environment name="phonefeed.read.dir.path" type="java.lang.String" value="D:/impex-app/data/source/phonefeed"/>
+        <Environment name="phonefeed.write.dir.path" type="java.lang.String" value="D:/impex-app/data/source/phonefeed/archive"/>
+		<Environment name="phonefeed.archive.path" type="java.lang.String" value="D:/impex-app/data/source/phonefeed"/>
+        <Environment name="phonefeed.file.prefix" type="java.lang.String" value="Phone_"/>
+		<Environment name="phonefeed.csv.phone.column" type="java.lang.String" value="phone"/>
+		<Environment name="phonefeed.csv.phoneoptinstatus.column" type="java.lang.String" value="phoneOptInStatus"/>
+        <Environment name="phonefeed.csv.timestamp.column" type="java.lang.String" value="timeStamp"/>
+		<Environment name="phonefeed.csv.dateformat" type="java.lang.String" value="yyyy-MM-dd hh:mm:ss.SSS"/>
+		<Environment name="phonefeed.csv.delim" type="java.lang.String" value="\t"/>
+		<Environment name="phonefeed.csv.headerincluded" type="java.lang.String" value="true"/>
+		
+		<!-- DB configurations -->
+		<Resource
+		name="jdbc/relateIntegrationDB"
+		auth="Container"
+		type="javax.sql.DataSource"
+		maxActive="200"
+		maxIdle="30"
+		minIdle="4"
+		maxWait="10000"
+		username="relateIntegrationUser"
+		password="relate!"
+		driverClassName="net.sourceforge.jtds.jdbc.Driver"
+		url="jdbc:jtds:sqlserver://127.0.0.1:1433/relate_integration"
+		removeAbandoned="true"
+		removeAbandonedTimeout="30"
+		logAbandoned="false"
+		testOnBorrow="true"
+		testWhileIdle="true"
+		validationQuery="SELECT 1"
+		timeBetweenEvictionRunsMillis="300000"
+		minEvictableIdleTimeMillis="600000"
+		numTestsPerEvictionRun="100" override="false"/>
+		
+		
+		
+</Context>
+
