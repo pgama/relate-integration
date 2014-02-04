@@ -27,15 +27,6 @@
 	<bean id="certFileUrl" class="org.springframework.jndi.JndiObjectFactoryBean">
     	<property name="jndiName" value="java:comp/env/cert.file.url"/>
 	</bean>
-	<bean id="trustStore" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-	    <property name="targetObject" value="#{@systemProperties}" />
-	    <property name="targetMethod" value="putAll" />
-	    <property name="arguments">
-	        <props>
-	            <prop key="javax.net.ssl.trustStore">#{@certFileUrl}</prop>
-	        </props>
-	    </property>
-	</bean>
 	
 	<!-- configurations to get the stub using the endpoint url configured in context.xml-->
 	<bean id="relateWSEndpointUrl" class="org.springframework.jndi.JndiObjectFactoryBean">
@@ -47,6 +38,7 @@
 	</bean>
 	<bean id="CustomerWebServiceManager" class="com.relateIntegration.relate.webservice.CustomerWebServiceManager">
 		<property name="relateWSStub" ref="relateWSStub"/>
+		<property name="certFileUrl" ref="certFileUrl"/>
 	</bean>
 	
 	

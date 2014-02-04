@@ -30,13 +30,24 @@ import com.relateIntegration.util.RIMConstants;
 public class CustomerWebServiceManager 
 {
 	public static CustomerServicesApiServiceStub relateWSStub;
+	public static String certFileUrl;
 	
 	public static void setRelateWSStub(CustomerServicesApiServiceStub relateWSStub) {
 		CustomerWebServiceManager.relateWSStub = relateWSStub;
 	}
+	
+	public static void setCertFileUrl(String certFileUrl) {
+		CustomerWebServiceManager.certFileUrl = certFileUrl;
+	}
+
+	public static void setTrustStoreProperty()
+	{
+		System.setProperty("javax.net.ssl.trustStore",certFileUrl);
+	}
 
 	public static String addOrUdateCustomer (Map<String, Object> customerInformation , int relateIntegrationId)
 	{
+		setTrustStoreProperty();
 		AddOrUpdateCustomerE addOrUpdateCustomerE = new AddOrUpdateCustomerE();
 		AddOrUpdateCustomer customer =new AddOrUpdateCustomer();
 		
@@ -71,6 +82,7 @@ public class CustomerWebServiceManager
 
 	public static List<Object> searchCustomers (Map<String,Object> customerInformation , int relateIntegrationId)
 	{
+		setTrustStoreProperty();
 		SearchCustomersE customersE= new SearchCustomersE();
 		SearchCustomers customers= new SearchCustomers();
 		
@@ -101,7 +113,8 @@ public class CustomerWebServiceManager
 	}
 	
 	public static List<Object>  retrieveCustomer(int alternateId)
-	{
+	{	
+		setTrustStoreProperty();
 		RetrieveCustomerE customersE= new RetrieveCustomerE();
 		RetrieveCustomer customer= new RetrieveCustomer();
 		
@@ -134,7 +147,8 @@ public class CustomerWebServiceManager
 	}
 	
 	public static String  mergeCustomers(CustIdentifier custSource, CustIdentifier[] custTarget)
-	{
+	{	
+		setTrustStoreProperty();
 		MergeCustomers mergeCustomers = new MergeCustomers();
 		MergeCustomersE mergeCustomersE = new MergeCustomersE();
 		
@@ -165,9 +179,11 @@ public class CustomerWebServiceManager
 		
 	}
 	
+	
 	@SuppressWarnings("unchecked")
 	public static String mergeCustomers(List<Object> customerList , String relateIntegrationId) 
-	{
+	{	
+		setTrustStoreProperty();
 		CustIdentifier[] custIndentifiers = new CustIdentifier[customerList.size()];
 		int index=0;
 		String backUpSourceCustomerId="";
